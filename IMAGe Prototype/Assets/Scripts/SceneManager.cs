@@ -29,19 +29,19 @@ public class SceneManager : MonoBehaviour {
                 Vector3 relativePosition;
                 switch (scenes[i].transition) {
                     case Scene.Transition.left:
-                        relativePosition = new Vector3(-Screen.width, 0);
+                        relativePosition = new Vector3(-1920, 0);
                         break;
                     case Scene.Transition.right:
-                        relativePosition = new Vector3(Screen.width, 0);
+                        relativePosition = new Vector3(1920, 0);
                         break;
                     case Scene.Transition.up:
-                        relativePosition = new Vector3(0, Screen.height);
+                        relativePosition = new Vector3(0, 1080);
                         break;
                     case Scene.Transition.down:
-                        relativePosition = new Vector3(0, -Screen.height);
+                        relativePosition = new Vector3(0, -1080);
                         break;
                     case Scene.Transition.none:
-                        relativePosition = new Vector3(0, -Screen.height);
+                        relativePosition = new Vector3(0, -1080);
                         break;
                     default:
                         relativePosition = new Vector3(0, 0);
@@ -64,9 +64,18 @@ public class SceneManager : MonoBehaviour {
         targetPosition = target;
     }
 
-    public void GoToScene (int sceneIndex) {
+    public void GoToScene ( int sceneIndex ) {
+        if (sceneIndex == 8) {
+            gameInput.enabled = true;
+        } else {
+            gameInput.enabled = false;
+        }
         currentScene = sceneIndex;
         DoTransition(scenes[currentScene], sceneIndex);
+    }
+
+    public void Quit () {
+        Application.Quit();
     }
 
     private void DoTransition (Scene targetScene, int sceneIndex) {
@@ -89,12 +98,6 @@ public class SceneManager : MonoBehaviour {
         if (currentScene > scenes.Length - 1) currentScene = scenes.Length - 1;
 
         transform.localPosition = Vector2.Lerp(transform.localPosition, -targetPosition, scenes[currentScene].transitionSpeed);
-
-        if (currentScene == 7) {
-            //gameInput.enabled = true;
-        } else {
-            gameInput.enabled = false;
-        }
     }
 
 }
