@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -21,5 +23,58 @@ public class GameManager : MonoBehaviour {
             return S_INSTANCE;
         }
     }
+
+    [HideInInspector]
+    public float value;
+
+    public List<GameObject> gameObjects = new List<GameObject>();
+
+    [HideInInspector]
+    public List<GameObject> tags = new List<GameObject>();
+    [HideInInspector]
+    public List<GameObject> artifactsFound = new List<GameObject>();
+
+    public GameObject canvas;
+
+    public Tutorial tutorial;
+
+    public VideoPlayer introPlayer;
+
+    private void Awake () {
+        tutorial = GameObject.FindGameObjectWithTag("Tutorial").GetComponent<Tutorial>();
+    }
+
+    private void Start () {
+        canvas.SetActive(false);
+    }
+
+    private void Update () {
+
+        if (!introPlayer.isPlaying && introPlayer.time >= 0.9f) {
+            canvas.SetActive(true);
+        }
+
+        if (tutorial.active) {
+            if (Input.GetMouseButtonDown(0)) {
+                tutorial.Next();
+            }
+        }
+
+    }
+
+    public void StartGame () {
+        foreach (GameObject gameObject in gameObjects) {
+            gameObject.SetActive(true);
+        }
+
+        tutorial.active = false;
+        tutorial.gameObject.SetActive(false);
+    }
+
+    public void RestartGame () {
+        Application.Quit();
+    }
+
+
 
 }

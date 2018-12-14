@@ -5,11 +5,6 @@ using UnityEngine.UI;
 
 public class PinchStretchInput : MonoBehaviour {
 
-    public Text text;
-
-
-    float value = 0.0f;
-
     private void Update () {
 
         // Check for input
@@ -30,14 +25,11 @@ public class PinchStretchInput : MonoBehaviour {
             float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
             // Adding it up to the value
-            value += deltaMagnitudeDiff;
-
+            GameManager.INSTANCE.value += deltaMagnitudeDiff / 10000.0f;
         }
 
-        value += Input.mouseScrollDelta.y;
-
-        text.text = value.ToString();
-
+                // Lags out app ? NOPE
+        GameManager.INSTANCE.value += Input.mouseScrollDelta.y / 100.0f;
     }
 
 }
