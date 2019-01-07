@@ -12,7 +12,7 @@ public class NoduleCount : MonoBehaviour {
     }
 
     private void Update () {
-        text.text = GameManager.INSTANCE.tags.Count.ToString();
+        text.text = GameManager.INSTANCE.tags.Count.ToString() + "/1";
     }
 
 }

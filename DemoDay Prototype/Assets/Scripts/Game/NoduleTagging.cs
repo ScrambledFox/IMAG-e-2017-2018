@@ -11,6 +11,8 @@ public class NoduleTagging : MonoBehaviour {
     GameObject tagLoaderGameObject;
     TagLoader tagLoader;
 
+    Transform imageViewer;
+
     public float minimumTouchTime = 0.5f;
     public float maximumTouchTime = 1.0f;
 
@@ -24,14 +26,17 @@ public class NoduleTagging : MonoBehaviour {
     private void Awake () {
         tagLoaderGameObject = GameObject.FindGameObjectWithTag("TagLoader");
         tagLoader = tagLoaderGameObject.GetComponent<TagLoader>();
+
+        imageViewer = GameObject.FindGameObjectWithTag("ImageViewer").transform;
     }
 
     private void Update () {
-        if (Input.touchCount > 0) {
+        if (Input.touchCount == 1) {
             Touch touch = Input.touches[0];
 
             if (touch.phase == TouchPhase.Began) {
                 if (CanTag()) {
+                    lastTappedPos = touch.position;
                     touching = true;
                 }
             }
@@ -49,6 +54,7 @@ public class NoduleTagging : MonoBehaviour {
             }
         }
 
+        /*
         if (Input.GetMouseButtonDown(0)) {
             lastTappedPos = Input.mousePosition;
 
@@ -57,6 +63,7 @@ public class NoduleTagging : MonoBehaviour {
             }
             
         }
+        */
 
         if (Input.GetMouseButtonUp(0)) {
             touching = false;
@@ -79,9 +86,10 @@ public class NoduleTagging : MonoBehaviour {
 
             if (currentTime >= maximumTouchTime) {
                 Debug.Log("PLACED");
-                GameObject tag = Instantiate(tagPrefab, lastTappedPos, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
+                GameObject tag = Instantiate(tagPrefab, lastTappedPos, Quaternion.identity, imageViewer);
                 GameManager.INSTANCE.tags.Add(tag);
                 tag.GetComponent<LayerFader>().layer = GameManager.INSTANCE.value;
+                //tag.transform.parent = imageViewer;
                 touching = false;
             }
         } else if (currentTime > 0.0f) {

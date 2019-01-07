@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class PinchStretchInput : MonoBehaviour {
 
+    ImageZooming dataZooming;
+
+    private void Start () {
+        dataZooming = GetComponent<ImageZooming>();
+    }
+
     private void Update () {
 
         // Check for input
@@ -24,12 +30,15 @@ public class PinchStretchInput : MonoBehaviour {
             // Find the difference
             float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
+            // ZoomLevel
+            dataZooming.zoomLevel -= deltaMagnitudeDiff / 1000.0f;
+
             // Adding it up to the value
-            GameManager.INSTANCE.value += deltaMagnitudeDiff / 10000.0f;
+            //GameManager.INSTANCE.value -= deltaMagnitudeDiff / 5000.0f;
         }
 
-                // Lags out app ? NOPE
-        GameManager.INSTANCE.value += Input.mouseScrollDelta.y / 100.0f;
+        // Pc input
+        //dataZooming.zoomLevel += Input.mouseScrollDelta.y / 50.0f;
     }
 
 }

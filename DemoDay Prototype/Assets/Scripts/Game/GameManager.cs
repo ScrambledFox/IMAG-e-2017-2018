@@ -37,8 +37,11 @@ public class GameManager : MonoBehaviour {
     public GameObject canvas;
 
     public Tutorial tutorial;
-
     public VideoPlayer introPlayer;
+
+    public float[] introPauseTimes;
+
+    public bool watchingIntro = true;
 
     private void Awake () {
         tutorial = GameObject.FindGameObjectWithTag("Tutorial").GetComponent<Tutorial>();
@@ -48,15 +51,25 @@ public class GameManager : MonoBehaviour {
         canvas.SetActive(false);
     }
 
+    int pauseIndex = 0;
     private void Update () {
 
-        if (!introPlayer.isPlaying && introPlayer.time >= 0.9f) {
-            canvas.SetActive(true);
+        if (introPlayer.time >= introPauseTimes[pauseIndex]) {
+            introPlayer.Pause();
+        } else if (!introPlayer.isPlaying && introPlayer.time <= 3.0f) {
+            introPlayer.Play();
         }
 
-        if (tutorial.active) {
-            if (Input.GetMouseButtonDown(0)) {
-                tutorial.Next();
+        if (!introPlayer.isPlaying && introPlayer.time >= 4.0f) {
+            canvas.SetActive(true);
+            watchingIntro = false;
+        }
+
+        if (Input.GetMouseButtonDown(0)) {
+            if (watchingIntro) {
+                if (!introPlayer.isPlaying) {
+                    pauseIndex++;
+                }
             }
         }
 
@@ -72,6 +85,10 @@ public class GameManager : MonoBehaviour {
     }
 
     public void RestartGame () {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void QuitGame () {
         Application.Quit();
     }
 

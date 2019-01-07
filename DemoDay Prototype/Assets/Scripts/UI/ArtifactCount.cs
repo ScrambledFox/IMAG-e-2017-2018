@@ -12,7 +12,7 @@ public class ArtifactCount : MonoBehaviour{
     }
 
     private void Update () {
-        text.text = GameManager.INSTANCE.artifactsFound.Count.ToString();
+        text.text = GameManager.INSTANCE.artifactsFound.Count.ToString() + "/3";
     }
 
 }

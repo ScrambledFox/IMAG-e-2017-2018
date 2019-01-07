@@ -12,6 +12,8 @@ public class Tag : MonoBehaviour {
 
     Vector2 lastSavedPos;
 
+    MoveData mover;
+
     private void Awake () {
         menu = transform.GetChild(0).gameObject;
         moveMenu = transform.GetChild(1).gameObject;
@@ -19,11 +21,13 @@ public class Tag : MonoBehaviour {
         fader = GetComponentInChildren<LayerFader>();
 
         lastSavedPos = transform.position;
+
+        mover = GameObject.FindGameObjectWithTag("ImageViewer").GetComponent<MoveData>();
     }
 
     public void OnDrag () {
         if (moveable) {
-            Vector2 pos = Input.mousePosition;
+            Vector2 pos = Input.mousePosition + new Vector3(-100f, 100f);
             transform.position = pos;
         }
     }
@@ -57,6 +61,8 @@ public class Tag : MonoBehaviour {
 
         moveable = true;
 
+        mover.canMove = false;
+
         CloseMenu();
         OpenMoveMenu();
     }
@@ -67,6 +73,8 @@ public class Tag : MonoBehaviour {
         fader.layer = GameManager.INSTANCE.value;
         fader.ResumeUpdate();
 
+        mover.canMove = true;
+
         CloseMoveMenu();
     }
 
@@ -75,6 +83,8 @@ public class Tag : MonoBehaviour {
 
         transform.position = lastSavedPos;
         fader.ResumeUpdate();
+
+        mover.canMove = true;
 
         CloseMoveMenu();
     }
